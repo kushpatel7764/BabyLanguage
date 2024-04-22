@@ -29,7 +29,17 @@ def setLowerNodes(From, OgFOR = None, For = None):
 
     #Check to make nodes from given priority.
     if (For == None):
-        if (From.__contains__(["/", "DIV"])):
+        if (From.__contains__(["(", "LPRAM"])):
+            start = From.index(["(", "LPRAM"])
+            end = From.index([")","RPRAM"])
+            arrayInPRAM = From[start+1:end] #get array from start until end but not end.
+            rootOfPRAM = ParseEX(arrayInPRAM)
+            #Connect root node, anywhere from start and end of from. 
+            From[start] = rootOfPRAM
+            #Remove all of Parenthesis. 
+            del From[start+1:end+1] #start + 1 makes sure that newly added node is not removed. end + 1 because end is excluded. 
+            return setLowerNodes(From,OgFOR = None, For = None)
+        elif (From.__contains__(["/", "DIV"])):
             For = From.index(["/", "DIV"])
             OgFOR = For
         elif (From.__contains__(["*", "MULTI"])):
@@ -72,12 +82,16 @@ def setLowerNodes(From, OgFOR = None, For = None):
 
 #This function might be just me rewriting the previos function
 def ParseEX(srcList):
-    #Base Case
+     #Base Case: No need to do set tree stuff if only one thing in list. 
     if (len(srcList) == 1):
-        return srcList[0]
+        return TreeNode(srcList[0])
     
     setLowerNodes(srcList)
 
+    #If setLowerNodes only returns a srcList with only 1 node then return that three node
+    if (len(srcList) == 1):
+        return srcList[0]
+   
     #Set Left node depending on its instance
     if (isinstance(srcList[0], list)):
         LeftTree = TreeNode(srcList[0])
@@ -110,7 +124,7 @@ def tokeniz(src):
             continue
         to_seek_list.append(find_token(v))
 
-        if len(to_return_list) != 0 and to_seek_list[1] == "NUMB":
+        if len(to_return_list) != 0 and (to_seek_list[1] == "NUMB" or to_seek_list[1] == "PERD"):
             if check_prev(to_return_list):
                 to_return_list[-1][0]= to_return_list[-1][0]+v
                 continue
@@ -126,6 +140,7 @@ def find_token(token):
         case ")": return "RPRAM"
         case "*": return "MULTI"
         case "/": return "DIV"
+        case ".": return "PERD"
         case _: 
             if token.isdigit():
                 return "NUMB"
@@ -133,7 +148,7 @@ def find_token(token):
                 return "UNKNOWN"
 
 def check_prev(list):
-    if list[-1][1] == "NUMB":
+    if (list[-1][1] == "NUMB" or list[-1][1] == "PERD"):
         return True
     else:
         return False
@@ -149,8 +164,9 @@ def evaluateTree(rootNode):
         return 0
     
     #return rootNode value if it is a digit 
-    if rootNode.value.isdigit(): #Root node is always a operator, if not then just return that number 
-        return int(rootNode.value) 
+    noPeriodrootNode = rootNode.value.replace(".", "")
+    if noPeriodrootNode.isdigit(): #Root node is always a operator, if not then just return that number 
+        return float(rootNode.value) 
     
     #If rootNode.value is not an digit then it must be a operator 
     left_value = evaluateTree(rootNode.left) #go in rootNode left and do all the calculations in it for left side
@@ -172,11 +188,15 @@ def evaluateTree(rootNode):
     
 
 def main():
-    src = "10 + 5 + 9 * 8 / 8"
-    srcList = tokeniz(src)
-    rootNode = ParseEX(srcList)
-    result = evaluateTree(rootNode)
-    print(result)
+    #Decimal not work.
+    while 1:
+        src = input(">> ")
+        if src == "/quit":
+            return
+        srcList = tokeniz(src)
+        rootNode = ParseEX(srcList)
+        result = evaluateTree(rootNode)
+        print(result)
 
 
 main()

@@ -14,25 +14,26 @@ def ParseEX(srcList, p1 = 0): #p1 is really high to ensure that at the start we 
     if srcList[0][1] == "NUMB" or srcList[0][1] == "LPRAM" or srcList[0][1] == "SUB": # 3 + 4 is in recursion or (
         leftTree = TreeNode(srcList[0])
         srcList.pop(0)
+    if leftTree.token == "SUB":
+        #Push to recursion and when "-" is reached.
+        rightTree = ParseEX(srcList,4)
+        #make the negative in leftTree an operator
+        op = leftTree
+        op.right = rightTree
+        #Make from  - -> 5 to 0 <- - -> 5
+        op.left = TreeNode(["0", "NUMB"])
+        #Store the new Binary three node in to leftTree
+        leftTree = op
+        #element added to the rightside of negative is already poped in the recursion
+    #If LeftTree is "("
+    if leftTree.token == "LPRAM":
+        #Push to recursion and when "(" is reached, push out when ")" is reached
+        rightTree = ParseEX(srcList,0)
+        #set the result to new leftTree
+        leftTree = rightTree
+        srcList.pop(0) #Remove ")"
     while len(srcList) > 0:
-        if leftTree.token == "SUB":
-            #Push to recursion and when "-" is reached.
-            rightTree = ParseEX(srcList,4)
-            #make the negative in leftTree an operator
-            op = leftTree
-            op.right = rightTree
-            #Make from  - -> 5 to 0 <- - -> 5
-            op.left = TreeNode(["0", "NUMB"])
-            #Store the new Binary three node in to leftTree
-            leftTree = op
-            #element added to the rightside of negative is already poped in the recursion
-        #If LeftTree is "("
-        if leftTree.token == "LPRAM":
-            #Push to recursion and when "(" is reached, push out when ")" is reached
-            rightTree = ParseEX(srcList,0)
-            #set the result to new leftTree
-            leftTree = rightTree
-            srcList.pop(0) #Remove ")"
+        
         if len(srcList) <= 1:
             #In case srcList is 0 here just return the leftTree
             if len(srcList) == 0:
@@ -57,7 +58,7 @@ def ParseEX(srcList, p1 = 0): #p1 is really high to ensure that at the start we 
                 op.right = ParseEX(srcList, priority.get(op.value, 0))  # Parse right subtree recursively
                 leftTree = op  # Update leftTree to be the operator node   
     return leftTree
-              
+  
     
 #-----Evaluate tree
 def evaluateTree(rootNode):
@@ -131,13 +132,12 @@ def check_prev(list):
 def main():
     #Decimal not work.
     while 1:
-        src = input(">> ")
-        if src == "exit":
-            return
+        src = input(">>> ")
+        if src.strip() == "exit":
+            break
         srcList = tokeniz(src)
         rootNode = ParseEX(srcList)
         result = evaluateTree(rootNode)
-        print(result)
-
-
+        print("The result is: ",result)
+    print("Now it is time to exit.")
 main()

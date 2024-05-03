@@ -58,9 +58,6 @@ def ParseEX(srcList, p1 = 0): #p1 is really high to ensure that at the start we 
                 leftTree = op  # Update leftTree to be the operator node   
     return leftTree
               
-
-#Email: pRathaur@student.bridgew.edu
-#Email: jdompreh@student.bridgew.edu    
     
 #-----Evaluate tree
 def evaluateTree(rootNode):

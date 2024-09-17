@@ -11,8 +11,10 @@ Overview: The project implements a basic programing language calculator that par
 Overall, this is a calculator program with support for baby language-like expressions that are translated into mathematical operations.
 
 Guide:
-Input Expressions: The program will prompt you to enter a "baby language" expression, which it will translate and calculate. For exmaple, "baaa gah baa" will translate to 3 - 2 and the output will be 1
-Exit: Type "poopoo" to end the program.
+Input Expressions: The program will prompt you to enter a "baby language" expression, which it will translate and calculate. For exmaple, "baaa gah baa" will translate to 3 - 2 and the output will be 1.
+
+
+"poopoo": end the program,
 "pee": "+",
 "gah": "-",
 "milk":"*",

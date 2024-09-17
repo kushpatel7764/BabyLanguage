@@ -14,7 +14,6 @@ Guide:
 Input Expressions: The program will prompt you to enter a "baby language" expression, which it will translate and calculate. For exmaple, "baaa gah baa" will translate to 3 - 2 and the output will be 1.
 
 
-"poopoo": end the program,
 "pee": "+",
 "gah": "-",
 "milk":"*",
@@ -31,3 +30,4 @@ Input Expressions: The program will prompt you to enter a "baby language" expres
 "baaaaaaa": "7",
 "baaaaaaaa": "8",
 "baaaaaaaaa": "9"
+"poopoo": end the program,

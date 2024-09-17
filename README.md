@@ -29,5 +29,5 @@ Input Expressions: The program will prompt you to enter a "baby language" expres
 "baaaaaa": "6",
 "baaaaaaa": "7",
 "baaaaaaaa": "8",
-"baaaaaaaaa": "9"
-"poopoo": end the program,
+"baaaaaaaaa": "9",
+"poopoo": end the program
